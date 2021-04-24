@@ -37,7 +37,7 @@ async function openDevice() {
 }
 async function colorize(device, [r, g, b]) {
     if (!device) return;
-    const data = Uint8Array.from([r, b, g, 0x00, 0x00, 0x40, 0x02, 0xFF22]);
+    const data = Uint8Array.from([r, b, g, 0b000000, 0b000000, 0b000011, 0xFF, 0xFF22]);
     // 4th parameter is light control, 0 is stable, 70 is fast blink?, 100 is medium blink?
     try {
         await device.sendReport(0, data);    //If the HID device does not use report IDs, set reportId to 0.
