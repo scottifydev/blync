@@ -36,8 +36,14 @@ async function openDevice() {
     return device;
 }
 async function colorize(device, [r, g, b]) {
+
+    const sound = [0b010001, 0b010010, 0b010011, 0b010100, 0b010101, 0b010110, 0b010111, 0b011000, 0b011001, 0b011010,]
+
+    var random = sound[Math.floor(Math.random() * 11)];
+
+    console.log(random);
     if (!device) return;
-    const data = Uint8Array.from([r, b, g, 0b000000, 0b000000, 0b000011, 0xFF, 0xFF22]);
+    const data = Uint8Array.from([r, b, g, 0b010100, random, 0b000010, 0xFF, 0xFF22]);
     // 4th parameter is light control, 0 is stable, 70 is fast blink?, 100 is medium blink?
     try {
         await device.sendReport(0, data);    //If the HID device does not use report IDs, set reportId to 0.
@@ -45,9 +51,28 @@ async function colorize(device, [r, g, b]) {
         console.error(error);
     }
 }
-window.addEventListener("click", function (event) {
-    const color = Array.from({ length: 3 }, () => Math.floor(Math.random() * 255));
-    glow(color)
-    // Log the clicked element in the console
-    console.log(color);
-}, false);
+// window.addEventListener("click", function (event) {
+//     const color = Array.from({ length: 3 }, () => Math.floor(Math.random() * 255));
+//     glow(color)
+//     // Log the clicked element in the console
+//     console.log(color);
+// }, false);
+
+window.onmessage = (event) => {
+
+    // if (messageType in event.data && event.data.messageType == "Agent/ChatRequest") {
+    //     const color = Array.from({ length: 3 }, () => Math.floor(Math.random() * 255));
+    //     glow(color)
+    //     console.log("NEW CHAT");
+    //     console.log(`Received message: ${JSON.stringify(event.data, null, 2)}`);
+    // }
+    if (event.data.hasOwnProperty('messageType')) {
+        const color = Array.from({ length: 3 }, () => Math.floor(Math.random() * 255));
+        glow(color)
+        console.log("NEW CHAT);
+        console.log(`Received message: ${JSON.stringify(event.data, null, 2)}`);
+    }
+    else {
+        console.log(`Received message: ${JSON.stringify(event.data, null, 2)}`);
+    }
+};

@@ -49,7 +49,7 @@ async function colorize(device, [r, g, b]) {
 
     console.log(random);
     if (!device) return;
-    const data = Uint8Array.from([r, b, g, 0b000000, random, 0b000010, 0xFF, 0xFF22]);
+    const data = Uint8Array.from([r, b, g, 0b010100, random, 0b000010, 0xFF, 0xFF22]);
     // 4th parameter is light control, 0 is stable, 70 is fast blink?, 100 is medium blink?
     try {
         await device.sendReport(0, data);    //If the HID device does not use report IDs, set reportId to 0.
@@ -63,6 +63,7 @@ window.addEventListener("click", function (event) {
     // Log the clicked element in the console
     console.log(color);
 }, false);
+
 
 // case 1: // slow
 // lightControl += 0b001100
